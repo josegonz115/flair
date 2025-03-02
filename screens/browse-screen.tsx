@@ -32,15 +32,11 @@ const useBrowseStore = create<BrowseStore>((set) => ({
 const CLOTHING_ITEMS = [
     {
         id: 1,
-        name: "White T-Shirt",
-        category: "Tops",
-        image: "https://via.placeholder.com/150",
+        image: "https://pin.it/2J3cqaYc8",
     },
     {
         id: 2,
-        name: "Blue Jeans",
-        category: "Bottoms",
-        image: "https://via.placeholder.com/150",
+        image: "../assets/images/2.jpg",
     },
     {
         id: 3,
@@ -82,12 +78,12 @@ const CLOTHING_ITEMS = [
 
 // Filter categories
 const CATEGORIES = [
-    "All",
-    "Tops",
-    "Bottoms",
-    "Dresses",
-    "Outerwear",
-    "Shoes",
+    "by you",
+    "feed",
+    "grunge",
+    "classy",
+    "edgy",
+    "modern",
     "Accessories",
 ];
 
@@ -108,12 +104,12 @@ export default function BrowseScreen() {
                 <Text className="text-2xl font-bold mb-4">Browse</Text>
 
                 {/* Search bar */}
-                <View className="flex-row items-center bg-gray-100 rounded-full px-4 py-2 mb-4">
+                {/* <View className="flex-row items-center bg-gray-100 rounded-full px-4 py-2 mb-4">
                     <Search size={20} color="#666" />
                     <Text className="ml-2 text-gray-500">
                         Search your wardrobe...
                     </Text>
-                </View>
+                </View> */}
 
                 {/* Category filters */}
                 <ScrollView
@@ -125,16 +121,16 @@ export default function BrowseScreen() {
                         <TouchableOpacity
                             key={category}
                             onPress={() => setSelectedCategory(category)}
-                            className={`mr-2 px-4 py-2 rounded-full ${
+                            className={`mr-2 px-4 py-2 rounded-full  ${
                                 selectedCategory === category
-                                    ? "bg-black"
+                                    ? "border-2 border-gray-400"
                                     : "bg-gray-200"
                             }`}
                         >
                             <Text
                                 className={`${
                                     selectedCategory === category
-                                        ? "text-white"
+                                        ? "text-gray-800"
                                         : "text-gray-800"
                                 }`}
                             >
@@ -147,7 +143,7 @@ export default function BrowseScreen() {
                 {/* View mode toggle and filter button */}
                 <View className="flex-row justify-between items-center mb-4">
                     <View className="flex-row bg-gray-200 rounded-lg">
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => setViewMode("grid")}
                             className={`p-2 rounded-l-lg ${
                                 viewMode === "grid" ? "bg-black" : ""
@@ -168,13 +164,13 @@ export default function BrowseScreen() {
                                 size={20}
                                 color={viewMode === "list" ? "white" : "black"}
                             />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
-                    <TouchableOpacity className="flex-row items-center bg-gray-200 px-3 py-2 rounded-lg">
+                    {/* <TouchableOpacity className="flex-row items-center bg-gray-200 px-3 py-2 rounded-lg">
                         <Filter size={18} color="black" />
                         <Text className="ml-1">Filter</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
 
@@ -206,7 +202,7 @@ export default function BrowseScreen() {
                             />
                             <View
                                 className={`${
-                                    viewMode === "list" ? "ml-3" : "mt-2"
+                                    viewMode === "list" ? "ml-4" : "mt-2"
                                 }`}
                             >
                                 <Text className="font-medium">{item.name}</Text>
