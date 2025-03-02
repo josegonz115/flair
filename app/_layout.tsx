@@ -1,5 +1,6 @@
 import '@/global.css';
 import { Stack } from "expo-router";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useContext, useEffect } from "react";
 import { useRouter, useSegments } from "expo-router";
 import { AuthProvider, AuthContext } from "@/providers/AuthProvider";
@@ -42,16 +43,22 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <AuthGuard>
-        <GluestackUIProvider mode={colorScheme === 'dark' ? 'dark' : 'light'}>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <SafeAreaProvider>
+          <GluestackUIProvider mode={colorScheme === 'dark' ? 'dark' : 'light'}>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <SafeAreaView edges={['top']} className='flex-1 bg-white'>
             <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-          </ThemeProvider>
-        </GluestackUIProvider>
+                  <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                </Stack>
+                <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+              </SafeAreaView>
+            </ThemeProvider>
+          </GluestackUIProvider>
+        </SafeAreaProvider>
       </AuthGuard>
     </AuthProvider>
   );
 }
+
+

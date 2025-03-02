@@ -9,6 +9,77 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      item_matches: {
+        Row: {
+          board_id: string | null
+          created_at: string | null
+          id: string
+          matched_pin_urls: string[]
+          personal_item_ids: string[]
+          similarity_scores: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          board_id?: string | null
+          created_at?: string | null
+          id?: string
+          matched_pin_urls: string[]
+          personal_item_ids: string[]
+          similarity_scores?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          board_id?: string | null
+          created_at?: string | null
+          id?: string
+          matched_pin_urls?: string[]
+          personal_item_ids?: string[]
+          similarity_scores?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_matches_board_id_fkey"
+            columns: ["board_id"]
+            isOneToOne: false
+            referencedRelation: "pinterest_boards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personal_items: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          image_url: string
+          tags: string[] | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       pinterest_boards: {
         Row: {
           created_at: string | null

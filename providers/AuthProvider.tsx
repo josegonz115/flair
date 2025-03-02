@@ -6,8 +6,14 @@ import { useFashionFinderStore } from "@/store/fashion-finder";
 type ContextProps = {
     user: null | boolean;
     session: Session | null;
-    signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-    signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+    signIn: (
+        email: string,
+        password: string
+    ) => Promise<{ error: Error | null }>;
+    signUp: (
+        email: string,
+        password: string
+    ) => Promise<{ error: Error | null }>;
     signOut: () => Promise<void>;
     resetPassword: (email: string) => Promise<{ error: Error | null }>;
     updatePassword: (password: string) => Promise<{ error: Error | null }>;
@@ -25,8 +31,8 @@ const AuthProvider = (props: Props) => {
     const [user, setUser] = useState<null | boolean>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [loading, setLoading] = useState(false);
-    
-    const setUserId = useFashionFinderStore(state => state.setUserId);
+
+    const setUserId = useFashionFinderStore((state) => state.setUserId);
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -40,7 +46,7 @@ const AuthProvider = (props: Props) => {
                 }
                 setSession(data.session);
                 setUser(data.session ? true : false);
-                
+
                 if (data.session) {
                     setUserId(data.session.user.id);
                 } else {
@@ -52,16 +58,16 @@ const AuthProvider = (props: Props) => {
                 setUserId(null);
             }
         };
-        
+
         fetchSession();
-        
+
         const { data } = supabase.auth.onAuthStateChange(
             async (event, session) => {
                 console.log(`Supabase auth event: ${event}`);
                 try {
                     setSession(session);
                     setUser(session ? true : false);
-                    
+
                     if (session) {
                         setUserId(session.user.id);
                     } else {
@@ -70,7 +76,7 @@ const AuthProvider = (props: Props) => {
                 } catch (error) {
                     console.error("error during auth state change:", error);
                     setUser(false);
-                    setUserId(null); 
+                    setUserId(null);
                 }
             }
         );
@@ -90,7 +96,10 @@ const AuthProvider = (props: Props) => {
             return { error };
         } catch (error) {
             console.error("Error signing in:", error);
-            return { error: error instanceof Error ? error : new Error('Unknown error') };
+            return {
+                error:
+                    error instanceof Error ? error : new Error("Unknown error"),
+            };
         } finally {
             setLoading(false);
         }
@@ -107,7 +116,10 @@ const AuthProvider = (props: Props) => {
             return { error };
         } catch (error) {
             console.error("Error signing up:", error);
-            return { error: error instanceof Error ? error : new Error('Unknown error') };
+            return {
+                error:
+                    error instanceof Error ? error : new Error("Unknown error"),
+            };
         } finally {
             setLoading(false);
         }
@@ -125,7 +137,6 @@ const AuthProvider = (props: Props) => {
             setLoading(false);
         }
     };
-
 
     return (
         <AuthContext.Provider

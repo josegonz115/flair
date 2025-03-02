@@ -20,7 +20,7 @@ export interface OverallMatch {
 
 // Types for /api/fashion-finder response
 export interface FashionFinderResponse {
-    best_overall_match: OverallMatch[];
+    best_overall_matches: OverallMatch[];
     board_info: {
         title: string;
         total_pins: number;
@@ -48,5 +48,57 @@ export type ApiResponse = FashionFinderResponse | FindSimilarResponse;
 export function isFashionFinderResponse(
     response: ApiResponse
 ): response is FashionFinderResponse {
-    return "best_overall_match" in response && "board_info" in response;
+    return "best_overall_matches" in response && "board_info" in response;
+}
+
+// Request type for /api/scrape-board
+export interface ScrapeboardRequest {
+    pinterest_url: string;
+    download_images?: boolean | string;
+}
+
+// response type for /api/scrape-board when download_images is true
+export interface ScrapeBoardDownloadResponse {
+    board_info: {
+        title: string;
+        total_pins: number;
+    };
+    pins_count: number;
+    uploaded_images: number;
+    uploaded_urls: string[];
+}
+
+// response type for /api/scrape-board when download_images is false
+interface Pins {
+    src: string;
+    alt: string;
+}
+export interface ScrapeBoardPinsResponse {
+    board_info: {
+        title: string;
+        total_pins: number;
+    };
+    pins: Pins[];
+}
+
+// Request type for /api/find-similar
+export interface FindSimilarRequest {
+    images: string[];
+    pinterest_url?: string;
+    use_supabase?: boolean;
+    username?: string;
+    board_name?: string;
+    library_directory?: string;
+}
+
+// Union type for both possible responses
+export type ScrapeBoardResponse =
+    | ScrapeBoardDownloadResponse
+    | ScrapeBoardPinsResponse;
+
+// Type guard to check which response type we have
+export function isScrapeBoardDownloadResponse(
+    response: ScrapeBoardResponse
+): response is ScrapeBoardDownloadResponse {
+    return "uploaded_urls" in response;
 }
