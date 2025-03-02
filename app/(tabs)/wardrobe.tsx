@@ -1,106 +1,126 @@
-import React from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect, useState } from "react";
+import {
+    View,
+    Text,
+    Image,
+    FlatList,
+    Dimensions,
+    TouchableOpacity,
+    SafeAreaView,
+    StatusBar,
+} from "react-native";
+import { useFashionFinderStore } from "@/store/fashion-finder";
+import { getUserItems } from "@/lib/bucket";
 
-import { IconSymbol } from "@/components/ui/IconSymbol";
+const { width } = Dimensions.get("window");
+const CARD_MARGIN = 8;
+const CARD_WIDTH = (width - CARD_MARGIN * 4) / 2;
+
+type ClothingItem = {
+    id: string;
+    source: {
+      uri: string;
+    };
+  };
+  
+  type Outfit = {
+    id: string;
+    items: ClothingItem[];
+  };
 
 export default function WardrobePage() {
+    const { userId, personalItems, fetchPersonalItems } =
+        useFashionFinderStore();
+    const [userItemImages, setUserItemImages] = useState<string[]>([]);
+
+    useEffect(() => {
+        fetchPersonalItems();
+    }, []);
+
+    useEffect(() => {
+        const loadUserItems = async () => {
+            if (userId) {
+                const images = await getUserItems(userId);
+                setUserItemImages(images);
+            }
+        };
+
+        loadUserItems();
+    }, [userId]);
+
+    const userOutfits: Outfit[] = React.useMemo(() => {
+        return personalItems.map((item) => ({
+          id: item.id,
+          items: [{ id: item.id, source: { uri: item.image_url } }],
+        }));
+      }, [personalItems]);
+
+    // Fallback to mock data if no personal items exist
+    const outfits: Outfit[] = userOutfits.length > 0 ? userOutfits : [];
+
+    // Render each outfit card
+    const renderOutfitCard = ({ item }: { item: Outfit }) => {
+        return (
+            <TouchableOpacity
+                className="bg-[#d9d9d9] rounded-2xl overflow-hidden p-3"
+                style={{
+                    width: CARD_WIDTH,
+                    margin: CARD_MARGIN,
+                    aspectRatio: 1,
+                }}
+            >
+                <View className="flex-1 flex-row flex-wrap justify-center items-center">
+                    {item.items.map((clothingItem) => (
+                        <Image
+                            key={clothingItem.id}
+                            source={clothingItem.source}
+                            className="w-[45%] h-[45%] m-[2.5%]"
+                            resizeMode="contain"
+                        />
+                    ))}
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
     return (
-        <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
-                    <ScrollView className="flex-1">
-                        <View className="px-4 py-6">
-                            <View className="flex-row items-center justify-between mb-2">
-                                <Text className="text-2xl font-bold dark:text-white">
-                                    Profile
-                                </Text>
-                                <TouchableOpacity>
-                                    <IconSymbol size={24} name="gear" color="#000" />
-                                </TouchableOpacity>
-                            </View>
-        
-                            {/* Profile header */}
-                            <View className="items-center py-6">
-                                <View className="h-24 w-24 rounded-full bg-gray-300 dark:bg-gray-700 mb-4" />
-                                <Text className="text-xl font-bold dark:text-white">
-                                    Alex Johnson
-                                </Text>
-                                <Text className="text-gray-500 dark:text-gray-400">
-                                    @alexfashion
-                                </Text>
-                            </View>
-        
-                            {/* Stats */}
-                            <View className="flex-row justify-around py-4 mb-6 border-y border-gray-200 dark:border-gray-800">
-                                <View className="items-center">
-                                    <Text className="text-lg font-bold dark:text-white">
-                                        42
-                                    </Text>
-                                    <Text className="text-sm text-gray-500 dark:text-gray-400">
-                                        Items
-                                    </Text>
-                                </View>
-                                <View className="items-center">
-                                    <Text className="text-lg font-bold dark:text-white">
-                                        12
-                                    </Text>
-                                    <Text className="text-sm text-gray-500 dark:text-gray-400">
-                                        Outfits
-                                    </Text>
-                                </View>
-                                <View className="items-center">
-                                    <Text className="text-lg font-bold dark:text-white">
-                                        156
-                                    </Text>
-                                    <Text className="text-sm text-gray-500 dark:text-gray-400">
-                                        Followers
-                                    </Text>
-                                </View>
-                            </View>
-        
-                            {/* Recent Outfits */}
-                            <View className="mb-6">
-                                <Text className="text-lg font-semibold mb-4 dark:text-white">
-                                    Recent Outfits
-                                </Text>
-                                <ScrollView
-                                    horizontal
-                                    showsHorizontalScrollIndicator={false}
-                                >
-                                    {[1, 2, 3].map((item) => (
-                                        <View key={item} className="mr-4">
-                                            <View className="h-48 w-32 bg-gray-200 dark:bg-gray-700 rounded-lg mb-2" />
-                                            <Text className="text-sm dark:text-white">
-                                                Outfit #{item}
-                                            </Text>
-                                        </View>
-                                    ))}
-                                </ScrollView>
-                            </View>
-        
-                            {/* Activity */}
-                            <View>
-                                <Text className="text-lg font-semibold mb-4 dark:text-white">
-                                    Activity
-                                </Text>
-                                {[1, 2, 3].map((item) => (
-                                    <View
-                                        key={item}
-                                        className="flex-row items-center py-3 border-b border-gray-100 dark:border-gray-800"
-                                    >
-                                        <View className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 mr-3" />
-                                        <View className="flex-1">
-                                            <Text className="dark:text-white">
-                                                You added a new item to your closet
-                                            </Text>
-                                            <Text className="text-xs text-gray-500 dark:text-gray-400">
-                                                2 days ago
-                                            </Text>
-                                        </View>
-                                    </View>
-                                ))}
-                            </View>
-                        </View>
-                    </ScrollView>
-                </SafeAreaView>
+        <SafeAreaView className="flex-1 bg-white">
+            <StatusBar barStyle="dark-content" />
+
+            {/* Profile and Tabs Section */}
+            <View className="flex-row items-center px-4 pt-4 pb-2">
+                <Image
+                    source={require("../../assets/images/grunge1.jpeg")}
+                    className="w-20 h-20 rounded-full"
+                />
+
+                <View className="flex-1 flex-row justify-center ml-4">
+                    <View className="items-center py-2 px-4">
+                        <Text className="text-lg font-medium text-black mb-1">
+                            saved
+                        </Text>
+                        <View className="h-0.5 w-full bg-black" />
+                    </View>
+                </View>
+            </View>
+
+            {/* Outfit Grid */}
+            <FlatList
+                data={outfits}
+                renderItem={renderOutfitCard}
+                keyExtractor={(item) => item.id}
+                numColumns={2}
+                contentContainerStyle={{ padding: CARD_MARGIN }}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                    <View className="flex-1 justify-center items-center p-8">
+                        <Text className="text-lg text-gray-500 text-center">
+                            No saved items yet. Add some clothing items to your
+                            wardrobe!
+                        </Text>
+                    </View>
+                }
+            />
+        </SafeAreaView>
     );
 }

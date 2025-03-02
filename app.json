@@ -9,13 +9,25 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Flair needs access to your camera to take photos of your clothes",
+        "NSPhotoLibraryUsageDescription": "Flair needs access to your photos to let you select clothes from your library"
+      },
+      "bundleIdentifier": "com.anonymous.flair"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.flair"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +43,14 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow flair to access your camera",
+          "microphonePermission": "Allow flair to access your microphone",
+          "recordAudioAndroid": true
         }
       ]
     ],
