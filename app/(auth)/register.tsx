@@ -1,31 +1,26 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   ScrollView,
   TouchableOpacity,
-  View,
   KeyboardAvoidingView,
-  Image,
   useColorScheme,
-  // Button,
+  Pressable,
 } from "react-native";
+import { Image } from "expo-image";
 import { supabase } from "../../lib/supabase";
-import { AuthStackParamList } from "../../types/navigation";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ButtonText, Button } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
 import { HStack } from "@/components/ui/hstack";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from "@/components/ui/text";
+import { Box } from "@/components/ui/box";
+import { Link } from "expo-router";
+import { router } from 'expo-router';
 
-import { Box } from "lucide-react-native";
 
 
-
-export default function ({
-  navigation,
-}: NativeStackScreenProps<AuthStackParamList, "Register">) {
+export default function Register() {
   const colorScheme = useColorScheme();
   const isDarkmode = colorScheme === "dark";
   const [email, setEmail] = useState<string>("");
@@ -42,7 +37,9 @@ export default function ({
       
       if (error) {
         alert(error.message);
-      } else if (!data.user) {
+      } else if (data.user) {
+        router.replace('/(tabs)');
+      } else {
         alert("Check your email for the login link!");
       }
     } catch (error: any) {
@@ -58,9 +55,9 @@ export default function ({
         <ScrollView contentContainerClassName="grow">
           <Center className={`flex-1 ${isDarkmode ? "bg-gray-900" : "bg-white"}`}>
             <Image
-              resizeMode="contain"
+              contentFit="contain"
               className="h-[220px] w-[220px]"
-              source={require("../../../assets/images/register.png")}
+              source={require("../../assets/images/register.png")}
             />
           </Center>
 
@@ -110,16 +107,16 @@ export default function ({
               </Button>
 
               <HStack space="xs" className="mt-4 justify-center">
-                <Text>Already have an account?</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("Login");
-                  }}
-                >
-                  <Text className="font-bold">
-                    Login here
-                  </Text>
-                </TouchableOpacity>
+                <Center className="mt-2">
+                    <Text>Already have an account?</Text>
+                    <Link href="/forget-password" asChild>
+                        <Pressable>
+                            <Text className="font-bold">
+                            Login here
+                            </Text>
+                        </Pressable>
+                    </Link>
+                </Center>
               </HStack>
 
               <Center className="mt-8">

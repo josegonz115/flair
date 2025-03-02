@@ -3,13 +3,13 @@ import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = process.env.SUPABASE_URL as string;
-const SUPABASE_KEY = process.env.SUPABASE_KEY as string;
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+const EXPO_PUBLIC_SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
+const EXPO_PUBLIC_SUPABASE_KEY = process.env.EXPO_PUBLIC_SUPABASE_KEY as string;
+if (!EXPO_PUBLIC_SUPABASE_URL || !EXPO_PUBLIC_SUPABASE_KEY) {
     throw new Error("supabase url or key not set");
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+export const supabase = createClient(EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_KEY, {
     auth: {
         storage: AsyncStorage,
         autoRefreshToken: true,

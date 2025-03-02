@@ -7,6 +7,7 @@ import { StatusBar } from "react-native";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useColorScheme } from "nativewind";
+import LoadingScreen from '@/screens/utils/loading';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const segments = useSegments();
@@ -27,6 +28,10 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
           router.replace("/(tabs)");
       }
   }, [user, segments]);
+
+  if (user === null) {
+    return <LoadingScreen />;
+  }
 
   return children;
 }

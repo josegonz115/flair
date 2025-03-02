@@ -1,29 +1,23 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   ScrollView,
   TouchableOpacity,
-  View,
   KeyboardAvoidingView,
-  Image,
   useColorScheme,
-  // Button,
+  Pressable,
 } from "react-native";
+import { Image } from "expo-image";
 import { supabase } from "../../lib/supabase";
-import { AuthStackParamList } from "../../types/navigation";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { ButtonText, Button } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
 import { HStack } from "@/components/ui/hstack";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { Text } from '@/components/ui/text/index';
-import { Box } from "lucide-react-native";
+import { Box } from "@/components/ui/box";
+import { Link } from "expo-router";
 
-
-export default function ({
-  navigation,
-}: NativeStackScreenProps<AuthStackParamList, "ForgetPassword">) {
+export default function ForgetPassword() {
   const colorScheme = useColorScheme();
   const isDarkmode = colorScheme === "dark";
   const [email, setEmail] = useState<string>("");
@@ -51,10 +45,11 @@ export default function ({
         <ScrollView contentContainerClassName="grow">
           <Center className={`flex-1 ${isDarkmode ? "bg-gray-900" : "bg-white"}`}>
             <Image
-              resizeMode="contain"
+              contentFit="contain"
               className="h-[220px] w-[220px]"
-              source={require("../../../assets/images/forget.png")}
-            />
+              source={require("../../assets/images/forget.png")}
+              />
+            
           </Center>
 
           <Box className={`flex-[3] px-5 pb-5 ${isDarkmode ? "bg-gray-800" : "bg-white"}`}>
@@ -90,17 +85,14 @@ export default function ({
 
               <HStack space="xs" className="mt-4 justify-center">
                 <Text>Already have an account?</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("Login");
-                  }}
-                >
-                  <Text className="font-bold">
-                    Login here
-                  </Text>
-                </TouchableOpacity>
+                <Link href="/login" asChild>
+                    <Pressable>
+                        <Text className="font-bold">
+                        Login here
+                        </Text>
+                    </Pressable>
+                </Link>
               </HStack>
-
               <Center className="mt-8">
                 <TouchableOpacity>
                   <Text className="font-bold">
