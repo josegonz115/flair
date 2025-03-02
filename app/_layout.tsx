@@ -1,39 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import '@/global.css';
+import { Stack } from "expo-router";
+import { useContext, useEffect } from "react";
+import { useRouter, useSegments } from "expo-router";
+import { AuthProvider, AuthContext } from "@/providers/AuthProvider";
+import { StatusBar } from "react-native";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { useColorScheme } from "nativewind";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const segments = useSegments();
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+      // if loading dont do anything
+      if (user === null) return;
 
-  if (!loaded) {
-    return null;
-  }
+      const inAuthGroup = segments[0] === "(auth)";
+
+      // if not logged in, redirect to auth flow
+      if (user === false && !inAuthGroup) {
+          router.replace("/(auth)/login");
+      // logged in but in auth group, redirect to main app
+      } else if (user === true && inAuthGroup) {
+          router.replace("/(tabs)");
+      }
+  }, [user, segments]);
+
+  return children;
+}
+
+export default function RootLayout() {
+  const { colorScheme } = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <AuthGuard>
+        <GluestackUIProvider mode={colorScheme === 'dark' ? 'dark' : 'light'}>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </AuthGuard>
+    </AuthProvider>
   );
 }

@@ -1,74 +1,71 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from "react";
+import { View, Text, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import BrowseScreen from "@/screens/browse-screen";
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+export default function BrowsePage() {
+    return (
+        <BrowseScreen></BrowseScreen>
+
+
+
+
+        // <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
+        //     <ScrollView className="flex-1">
+        //         <View className="px-4 py-6">
+        //             <View className="flex-row items-center justify-between mb-6">
+        //                 <Text className="text-2xl font-bold dark:text-white">
+        //                     Discover
+        //                 </Text>
+        //                 <IconSymbol size={24} name="bell" color="#000" />
+        //             </View>
+
+        //             {/* Search bar placeholder */}
+        //             <View className="bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-3 mb-6 flex-row items-center">
+        //                 <IconSymbol
+        //                     size={20}
+        //                     name="magnifyingglass"
+        //                     color="#666"
+        //                 />
+        //                 <Text className="ml-2 text-gray-500 dark:text-gray-400">
+        //                     Search styles, items...
+        //                 </Text>
+        //             </View>
+
+        //             {/* Featured section */}
+        //             <View className="mb-8">
+        //                 <Text className="text-lg font-semibold mb-4 dark:text-white">
+        //                     Featured Looks
+        //                 </Text>
+        //                 <View className="h-64 bg-gray-200 dark:bg-gray-700 rounded-xl mb-2" />
+        //                 <Text className="text-sm text-gray-500 dark:text-gray-400">
+        //                     Spring Collection 2025
+        //                 </Text>
+        //             </View>
+
+        //             {/* Trending section */}
+        //             <View>
+        //                 <Text className="text-lg font-semibold mb-4 dark:text-white">
+        //                     Trending Now
+        //                 </Text>
+        //                 <ScrollView
+        //                     horizontal
+        //                     showsHorizontalScrollIndicator={false}
+        //                 >
+        //                     {[1, 2, 3, 4].map((item) => (
+        //                         <View key={item} className="w-32 mr-4">
+        //                             <View className="h-40 bg-gray-200 dark:bg-gray-700 rounded-lg mb-2" />
+        //                             <Text className="text-sm dark:text-white">
+        //                                 Style #{item}
+        //                             </Text>
+        //                         </View>
+        //                     ))}
+        //                 </ScrollView>
+        //             </View>
+        //         </View>
+        //     </ScrollView>
+        // </SafeAreaView>
+    );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
